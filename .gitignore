@@ -1,0 +1,11 @@
+# Dependencies
+/node_modules
+/backend/dist # Compiled JS output
+/frontend/build # Compiled React output
+
+# Environment files
+.env
+.DS_Store
+
+# Logs
+npm-debug.log
