@@ -1,19 +1,23 @@
-# Node/npm files
+# .gitignore
+
+# Dependency directories
 /node_modules
-/dist
+/backend/node_modules
+/frontend/node_modules
+
+# Build output directories
+/backend/dist 
+/frontend/build 
+/frontend/public/dist 
+
+# Environment variables
+.env
+.env.development
+.env.production
+
+# Logs and system files
+.DS_Store
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.env
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# VS Code files
-.vscode/
-
-# Docker/Database artifacts
-*.log
-# Ignore any mounted volumes for the database
-/mysql_data
