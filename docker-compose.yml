@@ -60,9 +60,10 @@ services:
   # --------------------
   # 3. Frontend Service (React)
   # --------------------
+  # docker-compose.yml (Relevant Snippet)
   frontend:
     build:
-      context: ./frontend # Build from the Dockerfile in the ./frontend directory
+      context: ./frontend # Looks inside the frontend directory
     container_name: todo_frontend
     # Frontend needs the backend to be running to fetch data
     depends_on:
