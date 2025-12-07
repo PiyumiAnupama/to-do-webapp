@@ -1,0 +1,87 @@
+# docker-compose.yml
+version: '3.8'
+
+# Define our three services: db, backend, and frontend
+services:
+  # --------------------
+  # 1. Database Service (MySQL)
+  # --------------------
+  db:
+    image: mysql:8.0 
+    container_name: todo_db
+    # Read environment variables from the .env file
+    env_file:
+      - .env
+    environment:
+      # Use variables from .env to set up the database.
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      # Map the container port 3306 to the host port 3306 
+      - "3306:3306"
+    volumes:
+      # Persist data on the host machine
+      - db_data:/var/lib/mysql
+      # Run the schema script on first startup
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    restart: always # Always restart if it fails
+
+  # --------------------
+  # 2. Backend Service (Node.js/Express with TypeScript)
+  # --------------------
+  backend:
+    build:
+      context: ./backend # Build from the Dockerfile in the ./backend directory
+      dockerfile: Dockerfile.dev # Use a separate Dockerfile for development
+    container_name: todo_backend
+    # Depend on the DB service to ensure it starts first
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      # Pass database connection info to the backend app
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_DATABASE: ${MYSQL_DATABASE}
+      BACKEND_PORT: ${BACKEND_PORT}
+    ports:
+      # Map the container port to the host port
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    volumes:
+      # Mount the code for live reloading during development
+      - ./backend:/app
+      - /app/node_modules
+    restart: always
+
+  # --------------------
+  # 3. Frontend Service (React)
+  # --------------------
+  frontend:
+    build:
+      context: ./frontend # Build from the Dockerfile in the ./frontend directory
+    container_name: todo_frontend
+    # Frontend needs the backend to be running to fetch data
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    environment:
+      # Pass the API URL to the React app 
+      REACT_APP_API_URL: ${REACT_APP_API_URL}
+    ports:
+      # Map the container port (3000 by default for React/Vite) to the host port
+      - "${FRONTEND_PORT}:3000"
+    volumes:
+      # Mount the code for live reloading during development
+      - ./frontend:/app
+      - /app/node_modules
+    stdin_open: true # Keep container open for development
+    tty: true
+
+# Define named volume for persistent database storage
+volumes:
+  db_data: {}
