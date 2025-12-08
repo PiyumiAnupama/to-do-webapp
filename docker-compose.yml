@@ -74,8 +74,8 @@ services:
       # Pass the API URL to the React app 
       REACT_APP_API_URL: ${REACT_APP_API_URL}
     ports:
-      # Map the container port (3000 by default for React/Vite) to the host port
-      - "${FRONTEND_PORT}:3000"
+      # Map HOST port 3000 to the NGINX container port 80
+      - "${FRONTEND_PORT}:80"
     volumes:
       # Mount the code for live reloading during development
       - ./frontend:/app
