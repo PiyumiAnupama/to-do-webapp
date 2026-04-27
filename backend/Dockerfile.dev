@@ -1,0 +1,26 @@
+# backend/Dockerfile.dev
+
+# Base image
+FROM node:18-alpine
+
+# Set the working directory
+WORKDIR /app
+
+# Copy package files first to leverage Docker layer caching
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the application port
+ARG BACKEND_PORT=8080
+ENV PORT=${BACKEND_PORT}
+EXPOSE ${BACKEND_PORT}
+
+# Define the command to run the application in development mode
+# Note: This is overridden by the command in docker-compose.yml,
+# but it's a good fallback and context.
+CMD ["npm", "run", "docker-dev"]

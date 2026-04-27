@@ -1,0 +1,19 @@
+// backend/tsconfig.json (Updated)
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    
+    // --- Fix for Express/Dotenv Import Errors ---
+    "esModuleInterop": true, 
+    "allowSyntheticDefaultImports": true, 
+    // -------------------------------------------
+    
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}

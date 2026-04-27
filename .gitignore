@@ -1,11 +1,23 @@
-# Dependencies
+# .gitignore
+
+# Dependency directories
 /node_modules
-/backend/dist # Compiled JS output
-/frontend/build # Compiled React output
+/backend/node_modules
+/frontend/node_modules
 
-# Environment files
+# Build output directories
+/backend/dist 
+/frontend/build 
+/frontend/public/dist 
+
+# Environment variables
 .env
-.DS_Store
+.env.development
+.env.production
 
-# Logs
-npm-debug.log
+# Logs and system files
+.DS_Store
+*.log
+npm-depbug.log*p
+yarn-debug.log*
+yarn-error.log*
